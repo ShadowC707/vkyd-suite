@@ -1,0 +1,87 @@
+{
+  "name": "Настілки та Музика",
+  "type": "private_group",
+  "id": 999888777,
+  "messages": [
+    {
+      "id": 1,
+      "type": "service",
+      "date": "2026-10-23T19:00:00",
+      "date_unixtime": "1792774800",
+      "actor": "Тарас",
+      "actor_id": "user_music_01",
+      "action": "create_group",
+      "text": ""
+    },
+    {
+      "id": 2,
+      "type": "message",
+      "date": "2026-10-23T19:02:00",
+      "date_unixtime": "1792774920",
+      "from": "Тарас",
+      "from_id": "user_music_01",
+      "text": "Хто сьогодні на партію в Каркасон або Дюну? Гітару теж прихопив 🎸"
+    },
+    {
+      "id": 3,
+      "type": "message",
+      "date": "2026-10-23T19:04:00",
+      "date_unixtime": "1792775040",
+      "from": "Оксана",
+      "from_id": "user_music_02",
+      "reply_to_message_id": 2,
+      "text": "Я за Дюну! Але якщо знову спайсові хробаки все з'їдять — я граю на барабанах 🥁"
+    },
+    {
+      "id": 4,
+      "type": "message",
+      "date": "2026-10-23T19:10:00",
+      "date_unixtime": "1792775400",
+      "from": "Богдан",
+      "from_id": "user_music_03",
+      "text": "Яка піца береться? Чотири сири чи з ананасами? 🍕"
+    },
+    {
+      "id": 5,
+      "type": "message",
+      "date": "2026-10-23T19:11:30",
+      "date_unixtime": "1792775490",
+      "from": "Оксана",
+      "from_id": "user_music_02",
+      "reply_to_message_id": 4,
+      "text": "Тільки без ананасів, це священне правило клубу! 🚫🍍"
+    },
+    {
+      "id": 6,
+      "type": "message",
+      "date": "2026-10-23T19:15:00",
+      "date_unixtime": "1792775700",
+      "from": "Тарас",
+      "from_id": "user_music_01",
+      "media_type": "sticker",
+      "file": "stickers/dice_roll.webp",
+      "thumbnail": "stickers/dice_roll.webp_thumb.jpg",
+      "sticker_emoji": "🎲",
+      "text": ""
+    },
+    {
+      "id": 7,
+      "type": "message",
+      "date": "2026-10-23T19:18:00",
+      "date_unixtime": "1792775880",
+      "from": "Богдан",
+      "from_id": "user_music_03",
+      "text": "Кубик випав на 20! Крит успіх! 🎲✨"
+    },
+    {
+      "id": 8,
+      "type": "message",
+      "date": "2026-10-23T19:20:00",
+      "date_unixtime": "1792776000",
+      "from": "Тарас",
+      "from_id": "user_music_01",
+      "reply_to_message_id": 7,
+      "text": "Тоді замовляємо дві великі м'ясні, і починаємо акорд Червоної Рути!"
+    }
+  ]
+}

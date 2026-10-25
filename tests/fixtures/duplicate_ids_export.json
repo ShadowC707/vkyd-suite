@@ -1,0 +1,28 @@
+{
+  "name": "Chat with duplicates",
+  "type": "private_group",
+  "id": 12345,
+  "messages": [
+    {
+      "id": 1,
+      "type": "message",
+      "date": "2026-10-24T12:00:00",
+      "from": "User 1",
+      "text": "First message"
+    },
+    {
+      "id": 2,
+      "type": "message",
+      "date": "2026-10-24T12:01:00",
+      "from": "User 2",
+      "text": "Second message"
+    },
+    {
+      "id": 2,
+      "type": "message",
+      "date": "2026-10-24T12:02:00",
+      "from": "User 3",
+      "text": "Conflicting duplicate ID message!"
+    }
+  ]
+}

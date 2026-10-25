@@ -1,0 +1,95 @@
+{
+  "name": "Devpost Hackathon Team",
+  "type": "private_group",
+  "id": 100200300,
+  "messages": [
+    {
+      "id": 1,
+      "type": "service",
+      "date": "2026-10-24T18:00:00",
+      "date_unixtime": "1792857600",
+      "actor": "Олександр",
+      "actor_id": "user_dev_01",
+      "action": "create_group",
+      "text": ""
+    },
+    {
+      "id": 2,
+      "type": "message",
+      "date": "2026-10-24T18:05:00",
+      "date_unixtime": "1792857900",
+      "from": "Олександр",
+      "from_id": "user_dev_01",
+      "text": "Всім привіт! Стартуємо хакатон Build With AI: Basics. Хто бере каву? ☕"
+    },
+    {
+      "id": 3,
+      "type": "message",
+      "date": "2026-10-24T18:06:30",
+      "date_unixtime": "1792857990",
+      "from": "Марія",
+      "from_id": "user_dev_02",
+      "reply_to_message_id": 2,
+      "text": [
+        "Я вже з подвійним еспресо! ",
+        {"type": "bold", "text": "План простий:"},
+        " спочатку спека, потім код, без паніки."
+      ]
+    },
+    {
+      "id": 4,
+      "type": "message",
+      "date": "2026-10-24T18:10:00",
+      "date_unixtime": "1792858200",
+      "from": "Ігор",
+      "from_id": "user_dev_03",
+      "text": "Головне правило релізу: якщо білдиться на моєму ноуті — значить готово в прод! 🚀"
+    },
+    {
+      "id": 5,
+      "type": "message",
+      "date": "2026-10-24T18:12:00",
+      "date_unixtime": "1792858320",
+      "from": "Марія",
+      "from_id": "user_dev_02",
+      "reply_to_message_id": 4,
+      "text": "Ігор, ніяких деплоїв у п'ятницю ввечері, благаю 😂"
+    },
+    {
+      "id": 6,
+      "type": "message",
+      "date": "2026-10-24T18:15:00",
+      "date_unixtime": "1792858500",
+      "from": "Олександр",
+      "from_id": "user_dev_01",
+      "media_type": "sticker",
+      "file": "stickers/it_cat_coffee.webp",
+      "thumbnail": "stickers/it_cat_coffee.webp_thumb.jpg",
+      "sticker_emoji": "☕",
+      "text": ""
+    },
+    {
+      "id": 7,
+      "type": "message",
+      "date": "2026-10-24T18:20:00",
+      "date_unixtime": "1792858800",
+      "from": "Ігор",
+      "from_id": "user_dev_03",
+      "text": [
+        "Тестую запит: ",
+        {"type": "code", "text": "uv run pytest -v"},
+        " — все зелене! Слава Україні! 🇺🇦"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "message",
+      "date": "2026-10-24T18:22:00",
+      "date_unixtime": "1792858920",
+      "from": "Олександр",
+      "from_id": "user_dev_01",
+      "reply_to_message_id": 7,
+      "text": "Героям слава! 🇺🇦 Мерджимо у мейн і йдемо за піцою."
+    }
+  ]
+}

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вкид — Пам'ять цитат та гумористичний профіль групи</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <span class="stamp-badge">Vkyd • Вкид</span>
+        <h1 class="brand-title">Пам'ять цитат та гумор-профіль</h1>
+      </div>
+      <div class="chat-picker-wrapper">
+        <label for="chat-select" class="visually-hidden">Вибір чату:</label>
+        <select id="chat-select" class="chat-select" aria-label="Вибір активного чату">
+          <option value="">Завантаження чатів...</option>
+        </select>
+        <button id="btn-open-import" class="btn btn-secondary" type="button" aria-haspopup="dialog">+ Імпорт чату</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- Chat Metadata & Coverage Summary Banner -->
+    <section id="chat-summary-section" class="card chat-hero-card" aria-labelledby="chat-title-heading">
+      <div class="hero-header">
+        <div>
+          <span id="hero-badge" class="badge">Не обрано чат</span>
+          <h2 id="chat-title-heading" class="chat-name">Оберіть або імпортуйте архів чату</h2>
+          <p id="chat-meta-subtitle" class="chat-meta">Імпортуйте експорт Telegram у форматі JSON для початку роботи.</p>
+        </div>
+        <div class="hero-actions">
+          <a id="btn-export-profile-link" class="btn btn-outline" href="#" download style="display: none;">
+            📥 Завантажити інструкції (.md)
+          </a>
+        </div>
+      </div>
+
+      <div id="coverage-grid" class="coverage-grid" style="display: none;">
+        <div class="stat-box">
+          <span class="stat-label">Усього повідомлень</span>
+          <span id="stat-total-messages" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Підтримуваний текст</span>
+          <span id="stat-supported-messages" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Охоплення аналізом (AI)</span>
+          <span id="stat-analyzed-coverage" class="stat-value">0%</span>
+          <span id="stat-analyzed-count" class="stat-sub">0 повідомлень</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Версія корпусу</span>
+          <span id="stat-corpus-version" class="stat-value">v1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-navigation" aria-label="Розділи програми">
+      <button class="tab-btn active" data-tab="tab-search" type="button">Пошук цитат</button>
+      <button class="tab-btn" data-tab="tab-analysis" type="button">Аналіз та бюджет</button>
+      <button class="tab-btn" data-tab="tab-profile" type="button">Профіль гумору</button>
+      <button class="tab-btn" data-tab="tab-playground" type="button">Генерація відповідей</button>
+      <button class="tab-btn" data-tab="tab-telegram" type="button">Telegram-бот</button>
+    </nav>
+
+    <!-- TAB 1: Search Memories -->
+    <section id="tab-search" class="tab-content active" aria-labelledby="tab-search-heading">
+      <div class="card">
+        <div class="section-header">
+          <h3 id="tab-search-heading">Автентичний пошук спогадів та цитат</h3>
+          <span class="section-hint">Пошук за точними словами або виразами без втрати контексту</span>
+        </div>
+        <form id="search-form" class="search-bar-form">
+          <label for="search-input" class="visually-hidden">Пошуковий запит:</label>
+          <input type="search" id="search-input" class="input-search" placeholder="Пошук жартів, тем або реплік (напр. кава, деплой)..." maxlength="500">
+          <button type="submit" class="btn btn-primary">Знайти</button>
+          <button type="button" id="btn-clear-search" class="btn btn-outline">Очистити</button>
+        </form>
+
+        <div id="search-results-info" class="search-info" aria-live="polite"></div>
+        <div id="search-results-list" class="quote-grid" aria-live="polite"></div>
+
+        <div id="search-pagination" class="pagination-bar" style="display: none;">
+          <button id="btn-prev-page" class="btn btn-outline" type="button">← Попередня</button>
+          <span id="pagination-indicator" class="pagination-label">Сторінка 1</span>
+          <button id="btn-next-page" class="btn btn-outline" type="button">Наступна →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Analysis & Budget -->
+    <section id="tab-analysis" class="tab-content" aria-labelledby="tab-analysis-heading">
+      <div class="card">
+        <div class="section-header">
+          <h3 id="tab-analysis-heading">Аналіз корпусу та контроль викликів</h3>
+          <span class="section-hint">Аналіз хронологічних чанків повідомлень з лімітом бюджету</span>
+        </div>
+
+        <div id="analysis-estimate-box" class="callout callout-info">
+          <h4>Попередній розрахунок аналізу</h4>
+          <div class="estimate-stats">
+            <div><strong>Повідомлень:</strong> <span id="est-messages">—</span></div>
+            <div><strong>Чанків тексту:</strong> <span id="est-chunks">—</span></div>
+            <div><strong>Злиття (дерево):</strong> <span id="est-merges">—</span></div>
+            <div><strong>Оцінка викликів:</strong> <span id="est-total-calls">—</span></div>
+          </div>
+          <p class="estimate-note"><small id="est-note">Оцінка злиття є базовою нижньою межею за ступенем розгалуження.</small></p>
+        </div>
+
+        <div class="analysis-controls-bar">
+          <div class="input-group">
+            <label for="input-max-calls">Ліміт викликів (max_calls):</label>
+            <input type="number" id="input-max-calls" min="1" max="5000" value="1000" class="input-number">
+          </div>
+          <button id="btn-start-analysis" class="btn btn-coral" type="button">Почати аналіз</button>
+          <button id="btn-cancel-analysis" class="btn btn-secondary" type="button" style="display: none;">Зупинити</button>
+          <button id="btn-resume-analysis" class="btn btn-primary" type="button" style="display: none;">Продовжити аналіз</button>
+        </div>
+
+        <!-- Real-time Progress Card -->
+        <div id="analysis-progress-card" class="progress-card" style="display: none;">
+          <div class="progress-header">
+            <span class="progress-title">Статус завдання:</span>
+            <span id="analysis-status-badge" class="badge">idle</span>
+          </div>
+
+          <div class="progress-bar-container">
+            <div id="analysis-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+
+          <div class="progress-details-grid">
+            <div>
+              <span class="detail-label">Унікальні повідомлення:</span>
+              <span id="prog-messages">0 / 0</span>
+            </div>
+            <div>
+              <span class="detail-label">Опрацьовано чанків:</span>
+              <span id="prog-chunks">0 / 0</span>
+            </div>
+            <div>
+              <span class="detail-label">Використано викликів AI:</span>
+              <span id="prog-calls">0 / 0</span>
+            </div>
+          </div>
+
+          <div id="analysis-error-banner" class="callout callout-danger" style="display: none;" role="alert">
+            <strong id="analysis-error-title">Помилка виконання</strong>
+            <p id="analysis-error-message"></p>
+            <div id="analysis-error-action" class="error-action-hint"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Profile Editor & Suggestions -->
+    <section id="tab-profile" class="tab-content" aria-labelledby="tab-profile-heading">
+      <!-- AI Suggestion Banner (if available) -->
+      <div id="suggestion-banner" class="callout callout-suggestion" style="display: none;">
+        <div class="suggestion-header">
+          <strong>✨ Наявні нові пропозиції від штучного інтелекту</strong>
+          <span id="sugg-version-tag" class="badge badge-accent">v2 suggestion</span>
+        </div>
+        <p>AI проаналізував нові повідомлення та сформував оновлення профілю. Ви можете переглянути пропозицію та застосувати її, не перезаписуючи ваші власні правки.</p>
+        <div class="suggestion-actions">
+          <button id="btn-inspect-suggestion" class="btn btn-secondary" type="button">Переглянути пропозицію AI</button>
+          <button id="btn-apply-suggestion" class="btn btn-primary" type="button">Застосувати пропозицію</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-header">
+          <h3 id="tab-profile-heading">Інструкції стилю та гумору</h3>
+          <span id="profile-version-badge" class="badge">Версія: —</span>
+        </div>
+
+        <form id="profile-editor-form">
+          <div class="form-group">
+            <label for="profile-instructions-text">Інструкції особистості для бота (Markdown):</label>
+            <textarea id="profile-instructions-text" class="textarea-code" rows="12" placeholder="Правила спілкування, тон, реєстр та характер групи..."></textarea>
+          </div>
+
+          <div id="version-conflict-alert" class="callout callout-danger" style="display: none;" role="alert">
+            <strong>⚠️ Конфлікт версій!</strong>
+            <p id="version-conflict-msg">Профіль було оновлено в іншій вкладці або фоновому завданні. Оновіть сторінку, щоб завантажити актуальну версію перед збереженням.</p>
+            <button type="button" id="btn-reload-profile" class="btn btn-outline">Оновити профіль</button>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btn-save-profile" class="btn btn-primary">Зберегти правки автора</button>
+            <span id="profile-save-status" class="status-indicator" aria-live="polite"></span>
+          </div>
+        </form>
+
+        <!-- Structured Tone & Style Attributes -->
+        <div id="profile-structured-box" class="profile-structured-box" style="display: none;">
+          <div class="section-header">
+            <h4>Структурований профіль стилю та мови</h4>
+            <span class="section-hint">Автоматично виявлені характеристики спілкування та темп</span>
+          </div>
+          <div id="profile-structured-content" class="structured-style-grid"></div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Versioned Memes & Inside Jokes -->
+        <div class="section-header">
+          <h4>Локальні меми та жарти чату</h4>
+          <span class="section-hint">Виявлені повторювані теми з підтвердженими номерами повідомлень</span>
+        </div>
+        <div id="memes-container" class="memes-grid" aria-live="polite">
+          <p class="empty-state">Меми ще не виявлені або профіль не сформовано.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Playground & Grounded Reply -->
+    <section id="tab-playground" class="tab-content" aria-labelledby="tab-playground-heading">
+      <div class="card">
+        <div class="section-header">
+          <h3 id="tab-playground-heading">Генерація обґрунтованих відповідей</h3>
+          <span class="section-hint">Перевірка цитат, стилю та оцінка результатів</span>
+        </div>
+
+        <form id="reply-form" class="reply-form">
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="reply-mode-select">Режим генерації:</label>
+              <select id="reply-mode-select" class="select-styled">
+                <option value="quote">Тільки цитати (без виклику AI, детерміновано)</option>
+                <option value="auto" selected>Обґрунтований стиль (AI обирає цитату або стиль)</option>
+                <option value="generate">Вільний жарт (генерація в тоні групи)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reply-context-input">Повідомлення співрозмовника / Контекст (до 4000 символів):</label>
+            <textarea id="reply-context-input" class="textarea-context" rows="3" placeholder="Напишіть щось, на що бот має зреагувати..." maxlength="4000"></textarea>
+            <span class="char-counter"><span id="context-char-count">0</span> / 4000</span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btn-generate-reply" class="btn btn-coral">Згенерувати відповідь</button>
+          </div>
+        </form>
+
+        <!-- Reply Output Card -->
+        <div id="reply-output-card" class="reply-result-card" style="display: none;">
+          <div class="result-header">
+            <span class="result-title">Результат відповіді</span>
+            <span id="reply-action-badge" class="badge">action</span>
+          </div>
+
+          <div id="reply-body-text" class="reply-body" aria-live="polite"></div>
+          <div id="reply-attribution" class="reply-attribution"></div>
+
+          <!-- Source Drawer / Provenance -->
+          <details id="reply-source-drawer" class="source-drawer">
+            <summary class="drawer-summary">Розгорнути джерела та знайдені цитати-кандидати</summary>
+            <div id="reply-drawer-content" class="drawer-content"></div>
+          </details>
+
+          <!-- Feedback Mechanism -->
+          <div class="feedback-row">
+            <span class="feedback-label">Як результат?</span>
+            <button class="btn-feedback" data-verdict="landed" title="Влучно (лайк)" type="button">👍 Влучно</button>
+            <button class="btn-feedback" data-verdict="missed" title="Невлучно (дизлайк)" type="button">👎 Невлучно</button>
+            <button class="btn-feedback" data-verdict="overused" title="Заїжджено" type="button">🔁 Заїжджено</button>
+            <span id="feedback-acknowledgement" class="status-indicator"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Telegram Adapter Setup -->
+    <section id="tab-telegram" class="tab-content" aria-labelledby="tab-telegram-heading">
+      <div class="card">
+        <div class="section-header">
+          <h3 id="tab-telegram-heading">Налаштування та прив'язка Telegram-бота</h3>
+          <span class="section-hint">Управління прив'язками груп до локальних профілів</span>
+        </div>
+
+        <div class="telegram-status-box callout callout-info">
+          <div><strong>Статус токена:</strong> <span id="tg-token-status" class="badge">Перевірка...</span></div>
+          <div><strong>Дозволені групи (.env):</strong> <span id="tg-allowed-groups">Завантаження...</span></div>
+          <p><small>Полінг запускається окремою CLI-командою: <code>python -m app.telegram</code>. Веб-інтерфейс не потребує активного полінгу.</small></p>
+        </div>
+
+        <h4>Прив'язка поточної групи</h4>
+        <form id="telegram-binding-form" class="binding-form">
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="tg-input-chat-id">Telegram Group ID (напр. -1001234567890):</label>
+              <input type="text" id="tg-input-chat-id" class="input-text" placeholder="-100..." required>
+            </div>
+            <div class="form-group">
+              <label for="tg-input-cooldown">Кулдаун (секунди):</label>
+              <input type="number" id="tg-input-cooldown" min="1" max="3600" value="10" class="input-number">
+            </div>
+          </div>
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" id="tg-input-enabled" checked> Відповіді увімкнені для цієї групи
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary">Зберегти прив'язку</button>
+          <span id="tg-bind-status" class="status-indicator"></span>
+        </form>
+
+        <hr class="divider">
+
+        <h4>Активні прив'язки в системі</h4>
+        <div id="tg-bindings-table-wrapper" class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Telegram Chat ID</th>
+                <th>Профіль чату</th>
+                <th>Стан</th>
+                <th>Кулдаун</th>
+                <th>Остання дія</th>
+                <th>Дія</th>
+              </tr>
+            </thead>
+            <tbody id="tg-bindings-tbody">
+              <tr><td colspan="6" class="text-center">Немає збережених прив'язок.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Import Modal Dialog -->
+  <dialog id="import-dialog" class="modal-dialog">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Імпорт експорту Telegram</h3>
+        <button id="btn-close-import" class="btn-close" type="button" aria-label="Закрити">&times;</button>
+      </div>
+
+      <form id="import-form" class="import-modal-form">
+        <div class="drop-zone" id="drop-zone">
+          <p>Перетягніть сюди файл <code>result.json</code> або оберіть на комп'ютері</p>
+          <input type="file" id="import-file-input" accept=".json,application/json" required>
+        </div>
+
+        <div class="form-group">
+          <label for="import-name-override">Назва чату (необов'язково):</label>
+          <input type="text" id="import-name-override" class="input-text" placeholder="Залишити з файлу або вказати свою">
+        </div>
+
+        <div class="form-group">
+          <label for="import-timezone">Часовий пояс (необов'язково):</label>
+          <input type="text" id="import-timezone" class="input-text" placeholder="Europe/Kyiv, UTC тощо">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-import" class="btn btn-outline">Скасувати</button>
+          <button type="submit" id="btn-submit-import" class="btn btn-coral">Імпортувати архів</button>
+        </div>
+      </form>
+
+      <div id="import-result-view" style="display: none;">
+        <div class="callout callout-success">
+          <h4>Імпорт успішно завершено!</h4>
+          <div id="import-stats-summary" class="import-stats-list"></div>
+        </div>
+        <button type="button" id="btn-finish-import" class="btn btn-primary">Перейти до чату</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Suggestion Inspector Modal -->
+  <dialog id="suggestion-dialog" class="modal-dialog">
+    <div class="modal-box modal-wide">
+      <div class="modal-header">
+        <h3>Огляд пропозиції AI</h3>
+        <button id="btn-close-suggestion-modal" class="btn-close" type="button" aria-label="Закрити">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="diff-split">
+          <div class="diff-pane">
+            <h4>Активні інструкції автора</h4>
+            <div id="modal-active-instructions" class="code-view"></div>
+          </div>
+          <div class="diff-pane">
+            <h4>Пропозиція від AI</h4>
+            <div id="modal-suggested-instructions" class="code-view"></div>
+          </div>
+        </div>
+        <div class="modal-memes-section">
+          <h4>Запропоновані нові меми</h4>
+          <div id="modal-suggested-memes" class="memes-grid"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-modal-cancel-sugg" class="btn btn-outline">Закрити</button>
+        <button type="button" id="btn-modal-apply-sugg" class="btn btn-coral">Застосувати цю пропозицію</button>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="app-footer">
+    <p>Vkyd — Локальний суверенний інструмент аналізу пам'яті та стилю чату. Жодних викликів моделі без явної дії користувача.</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

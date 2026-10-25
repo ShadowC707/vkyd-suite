@@ -1,0 +1,14 @@
+{
+  "about": "Telegram account export",
+  "chats": {
+    "about": "Here are your chats",
+    "list": [
+      {
+        "name": "Group 1",
+        "type": "saved_messages",
+        "id": 1,
+        "messages": []
+      }
+    ]
+  }
+}

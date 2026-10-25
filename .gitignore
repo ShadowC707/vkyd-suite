@@ -1,0 +1,36 @@
+# Credentials and private chat material
+/tests/fixtures/result.json
+.env
+.env.*
+!.env.example
+data/
+imports/
+exports/
+*.sqlite
+*.sqlite3
+*.db
+*.log
+orchestration/reports/
+.review-input/
+devpost/learner-profile.md
+
+# Local tooling and build outputs
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+/Vkyd_Implementation_Plan.zip
+node_modules/
+.DS_Store
+data_backup_pre_merge/
+.pytest_tmp/
+.idea/
+.aws/
+.claude/
+.codex/
+

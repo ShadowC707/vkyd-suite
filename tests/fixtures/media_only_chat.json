@@ -1,0 +1,33 @@
+{
+  "name": "Only Stickers and Photos",
+  "type": "private_group",
+  "id": 555,
+  "messages": [
+    {
+      "id": 1,
+      "type": "service",
+      "date": "2026-10-24T10:00:00",
+      "action": "joined",
+      "text": ""
+    },
+    {
+      "id": 2,
+      "type": "message",
+      "date": "2026-10-24T10:01:00",
+      "from": "User A",
+      "media_type": "sticker",
+      "sticker_emoji": "🎉",
+      "file": "stickers/yay.webp",
+      "text": ""
+    },
+    {
+      "id": 3,
+      "type": "message",
+      "date": "2026-10-24T10:02:00",
+      "from": "User B",
+      "media_type": "photo",
+      "photo": "photos/photo_1.jpg",
+      "text": ""
+    }
+  ]
+}

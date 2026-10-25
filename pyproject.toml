@@ -1,0 +1,33 @@
+[project]
+name = "vkyd"
+version = "0.1.0"
+description = "Custom Telegram bots that learn group chat communication style and attributable quotes"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "python-multipart>=0.0.12",
+    "google-genai>=0.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "httpx>=0.28.0",
+    "ruff>=0.8.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["B008"]  # Allow FastAPI dependency injection defaults in route signatures
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
